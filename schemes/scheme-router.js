@@ -62,26 +62,26 @@ router.post("/", validation.schemeBody, async (req, res) => {
   }
 });
 
-router.post("/:id/steps", (req, res) => {
-  const stepData = req.body;
-  const { id } = req.params;
+// router.post("/:id/steps", (req, res) => {
+//   const stepData = req.body;
+//   const { id } = req.params;
 
-  Schemes.findById(id)
-    .then(scheme => {
-      if (scheme) {
-        Schemes.addStep(stepData, id).then(step => {
-          res.status(201).json(step);
-        });
-      } else {
-        res
-          .status(404)
-          .json({ message: "Could not find scheme with given id." });
-      }
-    })
-    .catch(err => {
-      res.status(500).json({ message: "Failed to create new step" });
-    });
-});
+//   Schemes.findById(id)
+//     .then(scheme => {
+//       if (scheme) {
+//         Schemes.addStep(stepData, id).then(step => {
+//           res.status(201).json(step);
+//         });
+//       } else {
+//         res
+//           .status(404)
+//           .json({ message: "Could not find scheme with given id." });
+//       }
+//     })
+//     .catch(err => {
+//       res.status(500).json({ message: "Failed to create new step" });
+//     });
+// });
 
 router.put(
   "/:id",
@@ -117,5 +117,19 @@ router.delete("/:id", validation.schemeID, async (req, res) => {
     res.status(500).json({ message: "Failed to delete scheme" });
   }
 });
+
+router.post(
+  "/:id/add-step",
+  [validation.schemeID, validation.stepBody],
+  async (req, res) => {
+    try {
+      await Schemes.addStep(req.body, req.params.id);
+      const steps = await Schemes.findSteps(req.params.id);
+      res.status(201).json(steps);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to add step" });
+    }
+  }
+);
 
 module.exports = router;

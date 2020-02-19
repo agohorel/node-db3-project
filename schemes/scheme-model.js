@@ -33,11 +33,16 @@ function remove(id) {
     .delete();
 }
 
+function addStep(step, scheme_id) {
+  return db("steps").insert({ ...step, scheme_id });
+}
+
 module.exports = {
   find,
   findById,
   findSteps,
   add,
   update,
-  remove
+  remove,
+  addStep
 };

@@ -23,4 +23,16 @@ function schemeBody(req, res, next) {
   }
 }
 
-module.exports = { schemeID, schemeBody };
+function stepBody(req, res, next) {
+  const { body } = req;
+
+  if (!body.scheme_id || !body.step_number || !body.instructions) {
+    res.status(400).json({
+      msg: "please provide a scheme_id, step_number, and instructions"
+    });
+  } else {
+    next();
+  }
+}
+
+module.exports = { schemeID, schemeBody, stepBody };
