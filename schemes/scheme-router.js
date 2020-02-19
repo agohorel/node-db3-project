@@ -50,16 +50,16 @@ router.get("/:id/steps", (req, res) => {
     });
 });
 
-router.post("/", (req, res) => {
+router.post("/", validation.schemeBody, async (req, res) => {
   const schemeData = req.body;
 
-  Schemes.add(schemeData)
-    .then(scheme => {
-      res.status(201).json(scheme);
-    })
-    .catch(err => {
-      res.status(500).json({ message: "Failed to create new scheme" });
-    });
+  try {
+    const [schemeID] = await Schemes.add(schemeData);
+    const scheme = await Schemes.findById(schemeID);
+    res.status(201).json(scheme);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to create new scheme" });
+  }
 });
 
 router.post("/:id/steps", (req, res) => {

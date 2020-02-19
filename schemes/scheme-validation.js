@@ -14,4 +14,13 @@ async function schemeID(req, res, next) {
   }
 }
 
-module.exports = { schemeID };
+function schemeBody(req, res, next) {
+  const { scheme_name } = req.body;
+  if (!scheme_name) {
+    res.status(400).json({ msg: "please provide a name for your scheme" });
+  } else {
+    next();
+  }
+}
+
+module.exports = { schemeID, schemeBody };
