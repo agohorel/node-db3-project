@@ -28,3 +28,11 @@ JOIN Customer as c
 ON o.CustomerId = c.Id
 JOIN Employee as e
 ON o.EmployeeId = e.Id;
+
+-- order id, product name, quantiy, price, total (quantiy * price)
+SELECT o.OrderID, p.ProductName, od.Quantity, p.Price, (p.Price * od.Quantity) as Total
+FROM Orders as o
+JOIN OrderDetails as od
+ON o.OrderID = od.OrderID
+JOIN Products as p
+ON od.ProductID = p.ProductID;
